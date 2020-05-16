@@ -13,7 +13,7 @@ class About extends Component {
     render() {
         return(
             <Card title="About the App">
-                <Text> Still testing.
+                <Text>This app was written by Emily McKinney in React Native as a portfolio project for the Nucamp Full-Stack Bootcamp.
                 </Text>
             </Card>
         );
