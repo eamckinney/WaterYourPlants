@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Home from './HomeComponent';
 import About from './AboutComponent';
 import RouteFilter from './RouteFilterComponent';
+import Plants from './PlantsComponent';
+import CreateNotification from './CreateNotificationComponent';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator, createDrawerNavigator,
     DrawerItems } from 'react-navigation';
@@ -27,6 +29,42 @@ const HomeNavigator = createStackNavigator(
                 iconStyle={styles.stackIcon}
                 onPress={() => navigation.toggleDrawer()}
             />
+        })
+    }
+);
+
+const PlantsNavigator = createStackNavigator(
+    {
+        Plants: { 
+            screen: Plants,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                    name='leaf'
+                    type='font-awesome'
+                    iconStyle={styles.stackIcon}
+                    onPress={() => navigation.toggleDrawer()}
+                />,
+                headerStyle: {
+                    backgroundColor: '#3D405B'
+                }
+            })
+        },
+        CreateNotification: { 
+            screen: CreateNotification,
+            navigationOptions: ({navigation}) => ({
+                headerStyle: {
+                    backgroundColor: '#FBBD06'
+                }
+            })
+        }
+    },
+    {
+        initialRouteName: 'Plants',
+        navigationOptions: ({navigation}) => ({
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
         })
     }
 );
@@ -92,13 +130,13 @@ const MainNavigator = createDrawerNavigator(
                 )
             }
         },
-        RouteFilter: {
-            screen: RouteFilterNavigator,
+        Plants: {
+            screen: PlantsNavigator,
             navigationOptions: {
-                drawerLabel: 'BetaForBeta',
+                drawerLabel: 'Find Your Plant',
                 drawerIcon: ({tintColor}) => (
                     <Icon
-                        name='fire'
+                        name='leaf'
                         type='font-awesome'
                         size={24}
                         color={tintColor}

@@ -1,0 +1,86 @@
+[
+	{
+        "id": 0,
+        "name": "Basil",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 1,
+        "name": "Chives",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full", "part"]
+	},
+	{
+        "id": 2,
+        "name": "Cilantro",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full", "part"]
+	},
+	{
+        "id": 3,
+        "name": "Dill",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 4,
+        "name": "Majoram",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 5,
+        "name": "Mint",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full", "part"]
+	},
+	{
+        "id": 6,
+        "name": "Oregano",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 7,
+        "name": "Parsley",
+		"type": "herb",
+		"soilMoisture": "moist",
+		"sunlight": ["full", "part"]
+	},
+	{
+        "id": 8,
+        "name": "Rosemary",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 9,
+        "name": "Sage",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full"]
+	},
+	{
+        "id": 10,
+        "name": "Tarragon",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full", "part"]
+	},
+	{
+        "id": 11,
+        "name": "Thyme",
+		"type": "herb",
+		"soilMoisture": "dry",
+		"sunlight": ["full"]
+	}
+]
