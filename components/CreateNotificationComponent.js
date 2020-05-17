@@ -15,41 +15,41 @@ class CreateNotification extends Component {
         this.state = {
             days: [
                 {
-                    name: "monday",
+                    id: 0,
+                    name: "Sunday",
                     checked: false
                 },
                 {
-                    name: "tuesday",
+                    id: 1,
+                    name: "Monday",
                     checked: false
                 },
                 {
-                    name: "wednesday",
+                    id: 2,
+                    name: "Tuesday",
                     checked: false
                 },
                 {
-                    name: "thursday",
+                    id: 3,
+                    name: "Wednesday",
                     checked: false
                 },
                 {
-                    name: "friday",
+                    id: 4,
+                    name: "Thursday",
                     checked: false
                 },
                 {
-                    name: "saturday",
+                    id: 5,
+                    name: "Friday",
                     checked: false
                 },
                 {
-                    name: "sunday",
+                    id: 6,
+                    name: "Saturday",
                     checked: false
                 }
             ],
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
             timeText: 'Select a time...',
             timeValue: new Date(),
             showTime: false
@@ -62,28 +62,20 @@ class CreateNotification extends Component {
 
     componentDidMount() {
         const plant = this.props.navigation.state.params.plant;
+        
         if (plant.soilMoisture === "moist") {
-            this.setState({
-                monday: true,
-                tuesday: true,
-                wednesday: true,
-                thursday: true,
-                friday: true,
-                saturday: true,
-                sunday: true,
+            updatedDays = this.state.days.map(day => {
+                day.checked = true;
+                return day;
             });
+            this.setState({days: updatedDays});
  
         } else if (plant.soilMoisture === "dry") {
-            this.setState({
-                monday: false,
-                tuesday: false,
-                wednesday: false,
-                thursday: false,
-                friday: false,
-                saturday: true,
-                sunday: false,
-            });
-            
+            updatedDays = this.state.days.map(day => {
+                if (day.name === "Saturday") { day.checked = true; }
+                return day;
+            })
+            this.setState({days: updatedDays});
         }
     }
 
@@ -108,12 +100,21 @@ class CreateNotification extends Component {
             body: `That's right, it's time to water your ${lowerCaseName}! Do it now, or you'll forget!`
         };
 
-        console.log("new Date(): " + (new Date()));
-        console.log("new Date('May 17, 2020'): " + (new Date('May 17, 2020')));
-        console.log("(new Date()).setHours(0,0,0,0): " + (new Date()).setHours(0,0,0,0));
+
         console.log("this.state.timeValue: " + this.state.timeValue);
 
-        let notifcationDay = [];
+        const notificationDays = this.state.days.filter(obj => obj.checked === true);
+        const notificationDatesAndTimes = notificationDays.map(obj => {
+            let d = new Date();
+            d.setDate(d.getDate() + (obj.id + 7 - d.getDay()) % 7);
+            d.setHours(this.state.timeValue.getHours(),this.state.timeValue.getMinutes(),0,0)
+            return d;
+        });
+        notificationDatesAndTimes.map(date => {
+            console.log(date.toString());
+        })
+
+        
         
        
 
@@ -129,17 +130,6 @@ class CreateNotification extends Component {
             });
         }
     }
-
-    onChange = (event, selectedDate) => {
-        //const currentDate = selectedDate || this.state.timeValue;
-        if (selectedDate) {
-            this.setState({timeValue: selectedDate});
-            this.setState({timeText: `${selectedDate.getHours()}:${selectedDate.getMinutes()}`});
-        }
-        console.log("selectedDate: " + selectedDate);
-        //console.log("currentDate: " + currentDate);
-    }
-
     
     render() {
         const plant = this.props.navigation.state.params.plant;
@@ -153,6 +143,21 @@ class CreateNotification extends Component {
             waterMsg = `Because ${lowerCaseName} is drought-loving, we recommend watering it at least once a week. Adjust your notification preferences below if this doesn't work with your schedule!`
             
         }
+
+        const renderCheckbox = ({item}) => {
+            return (
+                <CheckBox
+                    title={item.name}
+                    checked={item.checked}
+                    size={16}
+                    onPress={() => {
+                        const updatedDays = this.state.days;
+                        updatedDays[item.id].checked = !updatedDays[item.id].checked;
+                        this.setState({days: updatedDays});
+                    }}
+                />
+            );
+        };
         
 
         return(
@@ -163,7 +168,6 @@ class CreateNotification extends Component {
                     <Text style={styles.formItem} 
                         onPress={() => {
                             this.setState({
-                                //timeValue: new Date(),
                                 showTime: true
                             });
                             }}>
@@ -175,60 +179,32 @@ class CreateNotification extends Component {
                             timeZoneOffsetInMinutes={0}
                             value={this.state.timeValue}
                             mode="time"
-                            is24Hour={true}
+                            is24Hour={false}
                             display="default"
                             onChange={ (event, value) => {
+                                
+                                const hours = ((value.getHours() >= 13) ? `${value.getHours() - 12}` 
+                                    : ((value.getHours() === 0) ? `12` : `${value.getHours()}`));
+                                const minutes = (value.getMinutes() < 10) ? `0${value.getMinutes()}` : `${value.getMinutes()}` ;
+                                const ampm = (value.getHours() >= 12) ? `pm` : `am`;
+                                
                                 this.setState({
                                     timeValue: value,
+                                    timeText: `${hours}:${minutes} ${ampm}`,
                                     showTime: false
                                 });
-                                if (value.getMinutes() < 10) {
-                                    this.setState({timeText: `${value.getHours()}:0${value.getMinutes()}`})
-                                } else if (value.getMinutes() >= 10) {
-                                    this.setState({timeText: `${value.getHours()}:${value.getMinutes()}`})
-                                }
+                                
                                 
                             }}
                             />
                     )}
-                    
                 </View>
-                <CheckBox
-                    title='Saturday'
-                    checked={this.state.saturday}
-                    onPress={() => this.setState({saturday: !this.state.saturday})}
+                <FlatList
+                    data={this.state.days}
+                    renderItem={renderCheckbox}
+                    keyExtractor={item => item.id.toString()}
                 />
-                <CheckBox
-                    title='Sunday'
-                    checked={this.state.sunday}
-                    onPress={() => this.setState({sunday: !this.state.sunday})}
-                />
-                <CheckBox
-                    title='Monday'
-                    checked={this.state.monday}
-                    onPress={() => this.setState({monday: !this.state.monday})}
-                />
-                <CheckBox
-                    title='Tuesday'
-                    checked={this.state.tuesday}
-                    onPress={() => this.setState({tuesday: !this.state.tuesday})}
-                />
-                <CheckBox
-                    title='Wednesday'
-                    checked={this.state.wednesday}
-                    onPress={() => this.setState({wednesday: !this.state.wednesday})}
-                />
-                <CheckBox
-                    title='Thursday'
-                    checked={this.state.thursday}
-                    onPress={() => this.setState({thursday: !this.state.thursday})}
-                />
-                <CheckBox
-                    title='Friday'
-                    checked={this.state.friday}
-                    onPress={() => this.setState({friday: !this.state.friday})}
-                />
-
+                
 
                 <Button
                         onPress={() => this.presentLocalNotification()}
@@ -250,6 +226,26 @@ class CreateNotification extends Component {
         );
     }
 }
+
+const DayCheck = (props) => {
+    
+    
+    return(
+        <CheckBox
+            title='Friday'
+            checked={this.state.days[5].checked}
+            onPress={() => {
+                const updatedDays = this.state.days;
+                updatedDays[5].checked = !updatedDays[5].checked;
+                this.setState({days: updatedDays});
+            }}
+        />
+    );
+}
+
+
+
+
 
 const styles = StyleSheet.create({
     formRow: {
