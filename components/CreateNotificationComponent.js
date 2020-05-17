@@ -13,6 +13,36 @@ class CreateNotification extends Component {
         super(props);
 
         this.state = {
+            days: [
+                {
+                    name: "monday",
+                    checked: false
+                },
+                {
+                    name: "tuesday",
+                    checked: false
+                },
+                {
+                    name: "wednesday",
+                    checked: false
+                },
+                {
+                    name: "thursday",
+                    checked: false
+                },
+                {
+                    name: "friday",
+                    checked: false
+                },
+                {
+                    name: "saturday",
+                    checked: false
+                },
+                {
+                    name: "sunday",
+                    checked: false
+                }
+            ],
             monday: false,
             tuesday: false,
             wednesday: false,
@@ -20,7 +50,8 @@ class CreateNotification extends Component {
             friday: false,
             saturday: false,
             sunday: false,
-            time: '',
+            timeText: 'Select a time...',
+            timeValue: new Date(),
             showTime: false
         };
     }
@@ -77,6 +108,17 @@ class CreateNotification extends Component {
             body: `That's right, it's time to water your ${lowerCaseName}! Do it now, or you'll forget!`
         };
 
+        console.log("new Date(): " + (new Date()));
+        console.log("new Date('May 17, 2020'): " + (new Date('May 17, 2020')));
+        console.log("(new Date()).setHours(0,0,0,0): " + (new Date()).setHours(0,0,0,0));
+        console.log("this.state.timeValue: " + this.state.timeValue);
+
+        let notifcationDay = [];
+        
+       
+
+
+
         if (permission.status === 'granted') {
             Notifications.presentLocalNotificationAsync({
                 title: 'Your notifications have been set up!',
@@ -88,8 +130,14 @@ class CreateNotification extends Component {
         }
     }
 
-    showTimePicker = () => {
-        this.setState({showTime: !this.showTime});
+    onChange = (event, selectedDate) => {
+        //const currentDate = selectedDate || this.state.timeValue;
+        if (selectedDate) {
+            this.setState({timeValue: selectedDate});
+            this.setState({timeText: `${selectedDate.getHours()}:${selectedDate.getMinutes()}`});
+        }
+        console.log("selectedDate: " + selectedDate);
+        //console.log("currentDate: " + currentDate);
     }
 
     
@@ -110,21 +158,41 @@ class CreateNotification extends Component {
         return(
             <Card title={`Create a notification for ${plant.name}`}>
                 <Text style={{marginBottom: 20}}>{waterMsg}</Text>
-                {/*<View style={styles.formRow}>
+                <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Time: </Text>
-                    {this.showTime && (
+                    <Text style={styles.formItem} 
+                        onPress={() => {
+                            this.setState({
+                                //timeValue: new Date(),
+                                showTime: true
+                            });
+                            }}>
+                        {this.state.timeText}
+                    </Text>
+                    {this.state.showTime && (
                         <DateTimePicker
                             testID="dateTimePicker"
                             timeZoneOffsetInMinutes={0}
-                            value={(new Date()).getTime()}
+                            value={this.state.timeValue}
                             mode="time"
                             is24Hour={true}
                             display="default"
-                            onChange={() => this.setState({time: date})}
+                            onChange={ (event, value) => {
+                                this.setState({
+                                    timeValue: value,
+                                    showTime: false
+                                });
+                                if (value.getMinutes() < 10) {
+                                    this.setState({timeText: `${value.getHours()}:0${value.getMinutes()}`})
+                                } else if (value.getMinutes() >= 10) {
+                                    this.setState({timeText: `${value.getHours()}:${value.getMinutes()}`})
+                                }
+                                
+                            }}
                             />
                     )}
-                    <Text style={styles.formItem}>{this.time}</Text>
-                    </View>*/}
+                    
+                </View>
                 <CheckBox
                     title='Saturday'
                     checked={this.state.saturday}
@@ -192,11 +260,12 @@ const styles = StyleSheet.create({
         margin: 20
     },
     formLabel: {
-        fontSize: 18,
-        flex: 2
+        //flex: 2,
+        fontWeight: "bold",
+        
     },
     formItem: {
-        flex: 1
+        //flex: 1
     }
 });
 

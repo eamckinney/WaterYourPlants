@@ -25,15 +25,10 @@ class PlantSelector extends Component {
           plantIsHidden: false
         });
     }
-
-    handleNotification = () => {
-        console.log(this.state.selectedItems)
-    }
     
     render() {
         const items = plantsData;
         const { navigate } = this.props.navigation;
-        console.log(items);
 
         return(
             <View>
