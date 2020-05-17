@@ -5,7 +5,18 @@ import { Card, ListItem, Icon, Rating, Input, Tile, CheckBox, Button } from 'rea
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { connect } from 'react-redux';
+import { postNotification } from '../redux/ActionCreators';
 
+const mapStateToProps = state => {
+    return {
+        notifications: state.notifications
+    };
+};
+
+const mapDispatchToProps = {
+    postNotification: (plant, notificationDatesAndTimes) => (postNotification(plant, notificationDatesAndTimes))
+};
 
 
 class CreateNotification extends Component {
@@ -111,10 +122,11 @@ class CreateNotification extends Component {
             return d;
         });
         notificationDatesAndTimes.map(date => {
-            console.log(date.toString());
+            console.log("typeof(date): " + typeof(date));
         })
 
-        
+        this.props.postNotification(plant, notificationDatesAndTimes);
+        console.log(this.props.notifications.notificationDatesAndTimes[0]);
         
        
 
@@ -265,4 +277,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CreateNotification;
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNotification);

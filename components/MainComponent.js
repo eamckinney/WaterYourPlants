@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Home from './HomeComponent';
 import About from './AboutComponent';
-import RouteFilter from './RouteFilterComponent';
 import Plants from './PlantsComponent';
 import CreateNotification from './CreateNotificationComponent';
+import Notifications from './NotificationsComponent';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator, createDrawerNavigator,
     DrawerItems } from 'react-navigation';
@@ -69,9 +69,9 @@ const PlantsNavigator = createStackNavigator(
     }
 );
 
-const RouteFilterNavigator = createStackNavigator(
+const NotificationsNavigator = createStackNavigator(
     {
-        RouteFilter: { screen: RouteFilter }
+        Notifications: { screen: Notifications }
     },
     {
         navigationOptions: ({navigation}) => ({
@@ -83,7 +83,7 @@ const RouteFilterNavigator = createStackNavigator(
                 color: '#fff'
             },
             headerLeft: <Icon
-                name='fire'
+                name='bell-o'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
                 onPress={() => navigation.toggleDrawer()}
@@ -137,6 +137,20 @@ const MainNavigator = createDrawerNavigator(
                 drawerIcon: ({tintColor}) => (
                     <Icon
                         name='leaf'
+                        type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        Notifications: {
+            screen: NotificationsNavigator,
+            navigationOptions: {
+                drawerLabel: 'Your Plant Notifications',
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                        name='bell-o'
                         type='font-awesome'
                         size={24}
                         color={tintColor}
