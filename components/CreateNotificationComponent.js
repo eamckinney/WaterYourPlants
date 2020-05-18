@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text, FlatList, 
     Modal, StyleSheet, Alert } from 'react-native';
-import { Card, ListItem, Icon, Rating, Input, Tile, CheckBox, Button } from 'react-native-elements';
+import { Card, ListItem, Icon, Rating, Input, Tile, CheckBox, Button, withTheme } from 'react-native-elements';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -115,13 +115,13 @@ class CreateNotification extends Component {
         const notificationDatesAndTimes = notificationDays.map(obj => {
             let d = new Date();
             d.setDate(d.getDate() + (obj.id + 7 - d.getDay()) % 7);
-            d.setHours(this.state.timeValue.getHours(),this.state.timeValue.getMinutes(),0,0)
-            return d;
+            d.setHours(this.state.timeValue.getHours(),this.state.timeValue.getMinutes(),0,0);
+            return d.valueOf();
         });
-        notificationDatesAndTimes.map(date => {
-            console.log("typeof(date): " + typeof(date));
-        })
+        
 
+
+        //send to redux store
         this.props.postNotification(plant, notificationDatesAndTimes);
 
         const waterNotification = {
@@ -192,14 +192,25 @@ class CreateNotification extends Component {
                 <Text style={{marginBottom: 20}}>{waterMsg}</Text>
                 <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Time: </Text>
-                    <Text style={styles.formItem} 
+                    <Button 
+                        title={this.state.timeText}
+                        type='outline'
+                        titleStyle={{
+                            color: '#43484d',
+                            fontSize: 12,
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#fafafa',
+                            borderColor: '#ededed',
+                            borderWidth: 1,
+                            height: 30,
+                            alignSelf: 'flex-start',
+                        }}
                         onPress={() => {
                             this.setState({
                                 showTime: true
                             });
-                    }}>
-                        {this.state.timeText}
-                    </Text>
+                    }} />
                     {this.state.showTime && (
                         <DateTimePicker
                             testID="dateTimePicker"
@@ -261,14 +272,14 @@ const styles = StyleSheet.create({
     formRow: {
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
+        //flex: 1,
         flexDirection: 'row',
         margin: 20
     },
     formLabel: {
         //flex: 2,
         fontWeight: "bold",
-        
+        marginRight: 5
     },
     formItem: {
         //flex: 1

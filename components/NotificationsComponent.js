@@ -62,15 +62,23 @@ class Notifications extends Component {
                     <ListItem
                         title={item.plant.name}
                         subtitle={
-                            item.notificationDatesAndTimes.map(date => {
-                                //const dayName = days[date.getDay()];
-                                //const hours = date.getHours();
-                                //const minutes = date.getMinutes();
-                                //return `${dayName}, at ${hours}:${minutes}`;
-                                console.log(typeof(date));
-                                return date;
+                            item.notificationDatesAndTimes.map(dateNum => {
+                                const date = (new Date(dateNum));
+                                const dayName = days[date.getDay()];
+
+                                const hours = ((date.getHours() >= 13) ? `${date.getHours() - 12}` 
+                                    : ((date.getHours() === 0) ? `12` : `${date.getHours()}`));
+                                const minutes = (date.getMinutes() < 10) ? `0${date.getMinutes()}` : `${date.getMinutes()}` ;
+                                const ampm = (date.getHours() >= 12) ? `pm` : `am`;
+
+                                return `${dayName}, at ${hours}:${minutes} ${ampm}`;
+                                //console.log(typeof(date));
                             }).join('\n')
                         }
+                        style={{
+                            borderWidth: 1,
+                            borderColor: '#ededed'
+                        }}
                     />
                 </Swipeout>
             );
