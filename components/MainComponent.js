@@ -155,8 +155,9 @@ const MainNavigator = createDrawerNavigator(
                         size={24}
                         color={tintColor}
                     />
-                )
-            }
+                ),
+                
+            },
         },
         About: {
             screen: AboutNavigator,
@@ -174,7 +175,7 @@ const MainNavigator = createDrawerNavigator(
         } 
     },
     {
-        drawerBackgroundColor: '#FBBD06',
+        drawerBackgroundColor: '#FBBD06',        
     }
 );
 

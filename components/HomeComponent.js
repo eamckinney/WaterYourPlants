@@ -12,7 +12,7 @@ class Home extends Component {
     
     render() {
         return(
-            <Card title="Welcome!">
+            <Card title="Water Your Plants!">
                 <Text>To begin, click the icon in the upper left hand corner to see the menu. Then, click "Find Your Plant!"
                 </Text>
             </Card>

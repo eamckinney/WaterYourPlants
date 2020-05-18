@@ -103,15 +103,12 @@ class CreateNotification extends Component {
     }
 
     async presentLocalNotification() {
+
+        const { navigate } = this.props.navigation;
         const plant = this.props.navigation.state.params.plant;
         const lowerCaseName = plant.name.toLowerCase();
         const permission = await this.obtainNotificationPermission();
-        const waterNotification = {
-            title: `Your ${lowerCaseName} is thirsty!`,
-            body: `That's right, it's time to water your ${lowerCaseName}! Do it now, or you'll forget!`
-        };
-
-
+        
         console.log("this.state.timeValue: " + this.state.timeValue);
 
         const notificationDays = this.state.days.filter(obj => obj.checked === true);
@@ -126,11 +123,11 @@ class CreateNotification extends Component {
         })
 
         this.props.postNotification(plant, notificationDatesAndTimes);
-        console.log(this.props.notifications.notificationDatesAndTimes[0]);
-        
-       
 
-
+        const waterNotification = {
+            title: `Your ${lowerCaseName} is thirsty!`,
+            body: `That's right, it's time to water your ${lowerCaseName}! Do it now, or you'll forget!`
+        };
 
         if (permission.status === 'granted') {
             Notifications.presentLocalNotificationAsync({
@@ -141,6 +138,24 @@ class CreateNotification extends Component {
                 time: (new Date()).getTime() + 5000
             });
         }
+
+        Alert.alert(
+            'Notification scheduled!',
+            'Congratulations! You have scheduled your notification.',
+            [
+                {
+                    text: 'See My Notifications',
+                    onPress: () => {
+                        navigate('Notifications');
+                    }
+                },
+                {
+                    text: 'Return',
+                    style: 'cancel',
+                }
+            ],
+            { cancelable: false }
+        );
     }
     
     render() {
@@ -182,7 +197,7 @@ class CreateNotification extends Component {
                             this.setState({
                                 showTime: true
                             });
-                            }}>
+                    }}>
                         {this.state.timeText}
                     </Text>
                     {this.state.showTime && (
@@ -219,42 +234,25 @@ class CreateNotification extends Component {
                 
 
                 <Button
-                        onPress={() => this.presentLocalNotification()}
-                        title='Schedule Notification'
-                        icon={
-                            <Icon
-                                name='bell-o'
-                                type='font-awesome'
-                                color='#fff'
-                                iconStyle={{marginRight: 10}}
-                            />
-                        }
-                        buttonStyle={{
-                            backgroundColor: '#FBBD06',
-                            marginTop: 20
-                        }}
-                    />
+                    onPress={() => this.presentLocalNotification()}
+                    title='Schedule Notification'
+                    icon={
+                        <Icon
+                            name='bell-o'
+                            type='font-awesome'
+                            color='#fff'
+                            iconStyle={{marginRight: 10}}
+                        />
+                    }
+                    buttonStyle={{
+                        backgroundColor: '#FBBD06',
+                        marginTop: 20
+                    }}
+                />
             </Card>
         );
     }
 }
-
-const DayCheck = (props) => {
-    
-    
-    return(
-        <CheckBox
-            title='Friday'
-            checked={this.state.days[5].checked}
-            onPress={() => {
-                const updatedDays = this.state.days;
-                updatedDays[5].checked = !updatedDays[5].checked;
-                this.setState({days: updatedDays});
-            }}
-        />
-    );
-}
-
 
 
 
