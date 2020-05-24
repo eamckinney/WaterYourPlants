@@ -15,21 +15,29 @@ const HomeNavigator = createStackNavigator(
         Home: { screen: Home }
     },
     {
-        navigationOptions: ({navigation}) => ({
-            headerStyle: {
-                backgroundColor: '#3D405B'
+        headerMode: 'none',
+        cardStyle: { backgroundColor: '#3D405B' }
+        /*navigationOptions: ({navigation}) => ({
+            /*headerStyle: {
+                //backgroundColor: '#3D405B'
             },
-            headerTintColor: '#fff',
+            //headerTintColor: '#fff',
             headerTitleStyle: {
-                color: '#fff'
+                //color: '#fff'
             },
+            
             headerLeft: <Icon
-                name='home'
+                name='bars'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
                 onPress={() => navigation.toggleDrawer()}
-            />
-        })
+            />,
+
+            header: null,
+            cardStyle: { backgroundColor: '#3D405B' }
+            
+        })*/
+        
     }
 );
 
